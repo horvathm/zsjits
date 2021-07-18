@@ -1,6 +1,6 @@
 ﻿using LockerManagement.Interfaces;
 
-namespace LockerManagement
+namespace LockerManagement.Models
 {
     public class SubscriberModel
     {

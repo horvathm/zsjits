@@ -1,6 +1,7 @@
 using LockerManagement;
 using LockerManagement.Interfaces;
 using LockerServices;
+using LockerServices.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;

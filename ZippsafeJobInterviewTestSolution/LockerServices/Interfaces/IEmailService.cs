@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LockerServices
+namespace LockerServices.Interfaces
 {
     public interface IEmailService
     {

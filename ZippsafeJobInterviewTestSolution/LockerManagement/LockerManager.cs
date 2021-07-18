@@ -1,5 +1,7 @@
 ﻿using LockerManagement.Interfaces;
+using LockerManagement.Models;
 using LockerServices;
+using LockerServices.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

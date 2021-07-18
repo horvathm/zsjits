@@ -1,5 +1,6 @@
 ﻿using LockerManagement.Interfaces;
 using LockerServices;
+using LockerServices.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
