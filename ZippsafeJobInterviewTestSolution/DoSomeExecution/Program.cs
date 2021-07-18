@@ -15,10 +15,13 @@ LockerManager lockerManager = new LockerManager(
     sp.GetRequiredService<ILockerSystemManager>(),
     sp.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>());
 
-var subscriber = new DatabaseServiceAdapter(sp.GetRequiredService<IDatabaseService>());
+var subscriber1 = new DatabaseServiceAdapter(sp.GetRequiredService<IDatabaseService>());
+var subscriber2 = new DatabaseServiceAdapter(sp.GetRequiredService<IDatabaseService>());
 
 // Attach a subscriber
-lockerManager.AttachSubscriber(subscriber);
+lockerManager.AttachSubscriber(subscriber1);
+lockerManager.AttachSubscriber(subscriber2);
+lockerManager.DeactivateSubscriber(subscriber2);
 
 // Turn eco mode on
 await lockerManager.TurnEcoModeOn();
@@ -27,6 +30,7 @@ await lockerManager.TurnEcoModeOn();
 await lockerManager.TurnEcoModeOff();
 
 // Detach subscriber
-lockerManager.DetachSubscriber(subscriber);
+lockerManager.DetachSubscriber(subscriber1);
+lockerManager.DetachSubscriber(subscriber2);
 
 Console.ReadKey();

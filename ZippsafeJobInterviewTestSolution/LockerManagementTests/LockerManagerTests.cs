@@ -51,7 +51,6 @@ namespace LockerManagementTests
 
             // Assert
             emailServiceAdapterMock.Verify(x => x.SendNotification(It.IsAny<IEnumerable<LockerState>>()), Times.Once);
-
         }
 
         #region AttachSubscriberTests
@@ -177,5 +176,43 @@ namespace LockerManagementTests
             Assert.Throws<ArgumentNullException>(act);
         }
         #endregion
+
+        [Fact]
+        [Trait("Method", "ActivateSubscriber")]
+        public void DeactivateSubscriber_WithOneOfTwoSubscribersActive_ShouldSendNotification()
+        {
+            var lockerSystemManagerMock = new Mock<ILockerSystemManager>();
+            lockerSystemManagerMock
+                .Setup(x => x.SwitchEcoOn())
+                .Returns(Task.FromResult(new List<LockerState>()
+                {
+                    new LockerState() { LockerGuid = Guid.NewGuid(), RunsInEco = true},
+                    new LockerState() { LockerGuid = Guid.NewGuid(), RunsInEco = true}
+                }.AsEnumerable()));
+
+            ILockerManager lockerManager = new LockerManager(
+                lockerSystemManagerMock.Object, loggerFactory);
+
+            var emailServiceAdapterMock1 = new Mock<IEmailServiceAdapter>();
+            emailServiceAdapterMock1
+                .Setup(x => x.SendNotification(It.IsAny<IEnumerable<LockerState>>()))
+                .Returns(Task.CompletedTask);
+
+            var emailServiceAdapterMock2 = new Mock<IEmailServiceAdapter>();
+            emailServiceAdapterMock2
+                .Setup(x => x.SendNotification(It.IsAny<IEnumerable<LockerState>>()))
+                .Returns(Task.CompletedTask);
+
+            lockerManager.AttachSubscriber(emailServiceAdapterMock1.Object);
+
+            // Act
+            lockerManager.DeactivateSubscriber(emailServiceAdapterMock1.Object);
+
+            // Assert
+            lockerManager.AttachSubscriber(emailServiceAdapterMock2.Object);
+            lockerManager.TurnEcoModeOn();
+            emailServiceAdapterMock1.Verify(x => x.SendNotification(It.IsAny<IEnumerable<LockerState>>()), Times.Never);
+            emailServiceAdapterMock2.Verify(x => x.SendNotification(It.IsAny<IEnumerable<LockerState>>()), Times.Once);
+        }
     }
 }
