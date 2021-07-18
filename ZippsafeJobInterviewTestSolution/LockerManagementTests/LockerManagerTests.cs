@@ -24,7 +24,7 @@ namespace LockerManagementTests
         }
 
         [Fact]
-        [Trait("Method", "")]
+        [Trait("Method", "TurnEcoModeOn")]
         public void TurnEcoModeOn_WithAddedSubscriber_ShouldSendNotification()
         {
             var lockerSystemManagerMock = new Mock<ILockerSystemManager>();
@@ -32,13 +32,12 @@ namespace LockerManagementTests
                 .Setup(x => x.SwitchEcoOn())
                 .Returns(Task.FromResult(new List<LockerState>()
                 {
-                    new LockerState() { LockerGuid = Guid.NewGuid(), RunsInEcho = true},
-                    new LockerState() { LockerGuid = Guid.NewGuid(), RunsInEcho = true}
+                    new LockerState() { LockerGuid = Guid.NewGuid(), RunsInEco = true},
+                    new LockerState() { LockerGuid = Guid.NewGuid(), RunsInEco = true}
                 }.AsEnumerable()));
 
             ILockerManager lockerManager = new LockerManager(
-                lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                lockerSystemManagerMock.Object, loggerFactory);
 
             var emailServiceAdapterMock = new Mock<IEmailServiceAdapter>();
             emailServiceAdapterMock
@@ -65,7 +64,7 @@ namespace LockerManagementTests
 
             ILockerManager lockerManager = new LockerManager(
                 lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                loggerFactory);
 
             var emailServiceAdapterMock = new Mock<IEmailServiceAdapter>();
 
@@ -85,7 +84,7 @@ namespace LockerManagementTests
 
             ILockerManager lockerManager = new LockerManager(
                 lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                loggerFactory);
 
             var emailServiceAdapterMock = new Mock<IEmailServiceAdapter>();
             
@@ -107,7 +106,7 @@ namespace LockerManagementTests
 
             ILockerManager lockerManager = new LockerManager(
                 lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                loggerFactory);
 
             // Act
             Action act = () => { lockerManager.AttachSubscriber(null); };
@@ -127,7 +126,7 @@ namespace LockerManagementTests
 
             ILockerManager lockerManager = new LockerManager(
                 lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                loggerFactory);
 
             var emailServiceAdapterMock = new Mock<IEmailServiceAdapter>();
 
@@ -149,7 +148,7 @@ namespace LockerManagementTests
 
             ILockerManager lockerManager = new LockerManager(
                 lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                loggerFactory);
 
             var emailServiceAdapterMock = new Mock<IEmailServiceAdapter>();
 
@@ -169,7 +168,7 @@ namespace LockerManagementTests
 
             ILockerManager lockerManager = new LockerManager(
                 lockerSystemManagerMock.Object,
-                loggerFactory.CreateLogger<LockerManagerTests>());
+                loggerFactory);
 
             // Act
             Action act = () => { lockerManager.DetachSubscriber(null); };

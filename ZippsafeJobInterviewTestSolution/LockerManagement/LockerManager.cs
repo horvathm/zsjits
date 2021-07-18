@@ -14,22 +14,24 @@ namespace LockerManagement
         private List<ILockerEventSubscriber> lockerEventSubscribers;
 
 
-        public LockerManager(ILockerSystemManager lockerSystemManager, ILogger logger)
+        public LockerManager(ILockerSystemManager lockerSystemManager, ILoggerFactory loggerFactory)
         {
             lockerEventSubscribers = new List<ILockerEventSubscriber>();
 
             this.lockerSystemManager = lockerSystemManager;
-            this.logger = logger;
+            this.logger = loggerFactory.CreateLogger<LockerManager>();
         }
 
         public async Task TurnEcoModeOn()
         {
             await SwitchEcoMode(lockerSystemManager.SwitchEcoOn);
+            logger.LogInformation("Eco mode is turned [on] for the lockers");
         }
 
         public async Task TurnEcoModeOff()
         {
             await SwitchEcoMode(lockerSystemManager.SwitchEcoOff);
+            logger.LogInformation("Eco mode is turned [off] for the lockers");
         }
 
         public bool AttachSubscriber(ILockerEventSubscriber subscriber)
@@ -45,6 +47,7 @@ namespace LockerManagement
             if (!isSubscriberAlreadyAdded)
             {
                 lockerEventSubscribers.Add(subscriber);
+                logger.LogInformation("New subscriber added to the list with type: {type}", subscriber.GetType());
                 return true;
             }
 
@@ -59,7 +62,14 @@ namespace LockerManagement
                 throw new ArgumentNullException("Argument cannot be null");
             }
 
-            return lockerEventSubscribers.Remove(subscriber);
+            bool result = lockerEventSubscribers.Remove(subscriber);
+
+            if (result)
+            {
+                logger.LogInformation("A subscriber was removed with type {type}", subscriber.GetType());
+            }
+
+            return result;
         }
 
         private async Task SwitchEcoMode(Func<Task<IEnumerable<LockerState>>> action)

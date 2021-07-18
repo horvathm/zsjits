@@ -6,6 +6,6 @@ namespace LockerServices
     {
         public Guid LockerGuid { get; init; }
 
-        public bool RunsInEcho { get; init; }
+        public bool RunsInEco { get; init; }
     }
 }

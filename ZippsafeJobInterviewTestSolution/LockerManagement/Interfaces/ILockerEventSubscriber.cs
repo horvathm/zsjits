@@ -7,7 +7,7 @@ namespace LockerManagement.Interfaces
     public interface ILockerEventSubscriber
     {
         /// <summary>
-        /// 
+        /// Sends a notification about the locker state change.
         /// </summary>
         /// <param name="lockerStates"></param>
         /// <returns></returns>
